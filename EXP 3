@@ -1,69 +1,78 @@
 #include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+#define SIZE 5   // maximum size of queue
 
-#define MAX 100
+int queue[SIZE];
+int front = -1, rear = -1;
 
-char stack[MAX];
-int top = -1;
-
-void push(char c) {
-    stack[++top] = c;
-}
-
-char pop() {
-    return stack[top--];
-}
-
-int precedence(char c) {
-    if (c == '^') return 3;
-    if (c == '*' || c == '/') return 2;
-    if (c == '+' || c == '-') return 1;
-    return -1;
-}
-
-void infixToPostfix(char infix[]) {
-    char postfix[MAX];
-    int i, k = 0;
-    for (i = 0; infix[i] != '\0'; i++) {
-        char c = infix[i];
-
-        if (isalnum(c)) {               // Operand
-            postfix[k++] = c;
-        }
-        else if (c == '(') {            // Left bracket
-            push(c);
-        }
-        else if (c == ')') {            // Right bracket
-            while (top != -1 && stack[top] != '(') {
-                postfix[k++] = pop();
-            }
-            pop(); // Remove '('
-        }
-        else {                          // Operator
-            while (top != -1 && precedence(stack[top]) >= precedence(c)) {
-                postfix[k++] = pop();
-            }
-            push(c);
-        }
+// Function to insert element
+void enqueue(int value) {
+    if (rear == SIZE - 1) {
+        printf("Queue Overflow! Cannot insert %d\n", value);
+    } else {
+        if (front == -1) front = 0; // First element insertion
+        rear++;
+        queue[rear] = value;
+        printf("%d inserted into the queue.\n", value);
     }
-    while (top != -1) {
-        postfix[k++] = pop();
+}
+
+// Function to delete element
+void dequeue() {
+    if (front == -1 || front > rear) {
+        printf("Queue Underflow! Nothing to delete.\n");
+    } else {
+        printf("%d deleted from the queue.\n", queue[front]);
+        front++;
     }
-    postfix[k] = '\0';
-    printf("Postfix Expression: %s\n", postfix);
+}
+
+// Function to display queue
+void display() {
+    if (front == -1 || front > rear) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Queue elements: ");
+        for (int i = front; i <= rear; i++) {
+            printf("%d ", queue[i]);
+        }
+        printf("\n");
+    }
 }
 
 int main() {
-    char infix[MAX];
-    printf("Enter Infix Expression: ");
-    scanf("%s", infix);
+    int choice, value;
 
-    infixToPostfix(infix);
+    while (1) {
+        printf("\n--- Queue Menu ---\n");
+        printf("1. Enqueue (Insert)\n");
+        printf("2. Dequeue (Delete)\n");
+        printf("3. Display Queue\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    return 0;
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                enqueue(value);
+                break;
+
+            case 2:
+                dequeue();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Exiting program.\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
 }
-
-Output:
-Enter Infix Expression: (A+B)*(C-D)
-Postfix Expression: AB+CD-*
+ 
