@@ -1,92 +1,125 @@
 #include <stdio.h>
 
-// Function for Selection Sort
-void selectionSort(int arr[], int n) {
-    int i, j, min, temp;
-    for (i = 0; i < n - 1; i++) {
-        min = i;
-        for (j = i + 1; j < n; j++) {
-            if (arr[j] < arr[min])
-                min = j;
-        }
-        temp = arr[i];
-        arr[i] = arr[min];
-        arr[min] = temp;
-    }
-    printf("\nArray after Selection Sort: ");
-    for (i = 0; i < n; i++)
+// Function to display array
+void display(int arr[], int n) {
+    for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
+    printf("\n");
 }
 
-// Function for Bubble Sort
+// Selection Sort
+void selectionSort(int arr[], int n) {
+    int i, j, minIndex, temp;
+    for (i = 0; i < n-1; i++) {
+        minIndex = i;
+        for (j = i+1; j < n; j++) {
+            if (arr[j] < arr[minIndex])
+                minIndex = j;
+        }
+        temp = arr[i];
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+}
+
+// Bubble Sort
 void bubbleSort(int arr[], int n) {
     int i, j, temp;
-    for (i = 0; i < n - 1; i++) {
-        for (j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
+    for (i = 0; i < n-1; i++) {
+        for (j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
                 temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
             }
         }
     }
-    printf("\nArray after Bubble Sort: ");
-    for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
 }
 
-// Function for Insertion Sort
+// Insertion Sort
 void insertionSort(int arr[], int n) {
-    int i, j, key;
+    int i, key, j;
     for (i = 1; i < n; i++) {
         key = arr[i];
         j = i - 1;
         while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
+            arr[j+1] = arr[j];
             j--;
         }
-        arr[j + 1] = key;
+        arr[j+1] = key;
     }
-    printf("\nArray after Insertion Sort: ");
-    for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
 }
 
 int main() {
-    int arr[50], n, choice, i;
+    int arr[100], n, choice, tempArr[100];
+
     printf("Enter number of elements: ");
     scanf("%d", &n);
 
-    printf("Enter %d elements: ", n);
-    for (i = 0; i < n; i++)
+    printf("Enter elements: ");
+    for (int i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
+    }
 
     do {
-        printf("\n\n---- Sorting Menu ----");
-        printf("\n1. Selection Sort");
-        printf("\n2. Bubble Sort");
-        printf("\n3. Insertion Sort");
-        printf("\n4. Exit");
-        printf("\nEnter your choice: ");
+        printf("\n--- Menu ---\n");
+        printf("1. Selection Sort\n");
+        printf("2. Bubble Sort\n");
+        printf("3. Insertion Sort\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
 
-        switch (choice) {
+        // Copy original array to tempArr
+        for (int i = 0; i < n; i++) tempArr[i] = arr[i];
+
+        switch(choice) {
             case 1:
-                selectionSort(arr, n);
+                selectionSort(tempArr, n);
+                printf("Sorted Array (Selection Sort): ");
+                display(tempArr, n);
                 break;
             case 2:
-                bubbleSort(arr, n);
+                bubbleSort(tempArr, n);
+                printf("Sorted Array (Bubble Sort): ");
+                display(tempArr, n);
                 break;
             case 3:
-                insertionSort(arr, n);
+                insertionSort(tempArr, n);
+                printf("Sorted Array (Insertion Sort): ");
+                display(tempArr, n);
                 break;
             case 4:
-                printf("\nExiting program...");
+                printf("Exiting...\n");
                 break;
             default:
-                printf("\nInvalid choice! Try again.");
+                printf("Invalid choice!\n");
         }
     } while (choice != 4);
 
     return 0;
 }
+
+Output:
+Enter number of elements: 5
+Enter elements: 18
+36
+54
+72
+90
+
+--- Menu ---
+1. Selection Sort
+2. Bubble Sort
+3. Insertion Sort
+4. Exit
+Enter your choice: 1
+Sorted Array (Selection Sort): 18 36 54 72 90
+
+--- Menu ---
+1. Selection Sort
+2. Bubble Sort
+3. Insertion Sort
+4. Exit
+Enter your choice: 2
+Sorted Array (Bubble Sort): 18 36 54 72 90
