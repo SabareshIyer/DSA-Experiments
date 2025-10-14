@@ -1,119 +1,149 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure
+// Define Node
 struct Node {
-    int roll;
+    int data;
     struct Node* next;
 };
 
 struct Node* head = NULL;
 
-// Function to create a new node
-struct Node* createNode(int roll) {
+// Insert at Beginning
+void insertBegin(int value) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->roll = roll;
-    newNode->next = NULL;
-    return newNode;
+    newNode->data = value;
+    newNode->next = head;
+    head = newNode;
 }
 
-// Insert at end
-void insertRoll(int roll) {
-    struct Node* newNode = createNode(roll);
+// Insert at End
+void insertEnd(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
     if (head == NULL) {
         head = newNode;
     } else {
         struct Node* temp = head;
-        while (temp->next != NULL) {
+        while (temp->next != NULL)
             temp = temp->next;
-        }
         temp->next = newNode;
     }
-    printf("Roll number %d inserted successfully!\n", roll);
 }
 
-// Display all roll numbers
-void displayRolls() {
+// Delete from Beginning
+void deleteBegin() {
     if (head == NULL) {
-        printf("No roll numbers available!\n");
-        return;
+        printf("List is empty!\n");
+    } else {
+        struct Node* temp = head;
+        head = head->next;
+        free(temp);
     }
-    struct Node* temp = head;
-    printf("\n--- Student Roll Numbers ---\n");
-    while (temp != NULL) {
-        printf("%d -> ", temp->roll);
-        temp = temp->next;
-    }
-    printf("NULL\n");
 }
 
-// Delete a roll number
-void deleteRoll(int roll) {
+// Delete from End
+void deleteEnd() {
+    if (head == NULL) {
+        printf("List is empty!\n");
+    } else if (head->next == NULL) {
+        free(head);
+        head = NULL;
+    } else {
+        struct Node* temp = head;
+        while (temp->next->next != NULL)
+            temp = temp->next;
+        free(temp->next);
+        temp->next = NULL;
+    }
+}
+
+// Display List
+void display() {
     if (head == NULL) {
         printf("List is empty!\n");
         return;
     }
     struct Node* temp = head;
-    struct Node* prev = NULL;
-
-    while (temp != NULL && temp->roll != roll) {
-        prev = temp;
+    printf("Linked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
         temp = temp->next;
     }
-
-    if (temp == NULL) {
-        printf("Roll number %d not found!\n", roll);
-        return;
-    }
-
-    if (prev == NULL) {
-        head = head->next; // deleting first node
-    } else {
-        prev->next = temp->next;
-    }
-
-    free(temp);
-    printf("Roll number %d deleted successfully!\n", roll);
+    printf("NULL\n");
 }
 
-// Main menu
 int main() {
-    int choice, roll;
-
+    int choice, value;
     while (1) {
-        printf("\n--- Student Roll Number Menu ---\n");
-        printf("1. Insert Roll Number\n");
-        printf("2. Display Roll Numbers\n");
-        printf("3. Delete Roll Number\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
+        printf("\n--- Singly Linked List Menu ---\n");
+        printf("1. Insert at Beginning\n");
+        printf("2. Insert at End\n");
+        printf("3. Delete from Beginning\n");
+        printf("4. Delete from End\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter roll number: ");
-                scanf("%d", &roll);
-                insertRoll(roll);
+                printf("Enter value: ");
+                scanf("%d", &value);
+                insertBegin(value);
                 break;
-
             case 2:
-                displayRolls();
+                printf("Enter value: ");
+                scanf("%d", &value);
+                insertEnd(value);
                 break;
-
             case 3:
-                printf("Enter roll number to delete: ");
-                scanf("%d", &roll);
-                deleteRoll(roll);
+                deleteBegin();
                 break;
-
             case 4:
-                printf("Exiting... Goodbye!\n");
+                deleteEnd();
+                break;
+            case 5:
+                display();
+                break;
+            case 6:
                 exit(0);
-
             default:
-                printf("Invalid choice! Try again.\n");
+                printf("Invalid choice!\n");
         }
     }
     return 0;
 }
+
+Output:
+--- Singly Linked List Menu ---
+1. Insert at Beginning
+2. Insert at End
+3. Delete from Beginning
+4. Delete from End
+5. Display
+6. Exit
+Enter choice: 1
+Enter value: 18
+
+--- Singly Linked List Menu ---
+1. Insert at Beginning
+2. Insert at End
+3. Delete from Beginning
+4. Delete from End
+5. Display
+6. Exit
+Enter choice: 2
+Enter value: 36 
+
+--- Singly Linked List Menu ---
+1. Insert at Beginning
+2. Insert at End
+3. Delete from Beginning
+4. Delete from End
+5. Display
+6. Exit
+Enter choice: 5
+Linked List: 18 -> 36 -> NULL
